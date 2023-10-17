@@ -4,6 +4,8 @@ import Image from "next/image";
 export default async function Home({ searchParams }) {
   const genre = searchParams.genre || "fetchPopular";
 
+
+  
   const res = await fetch(
     `https://api.themoviedb.org/3/${
       genre === "fetchTopRated" ? "movie/top_rated" : "trending/all/week"
