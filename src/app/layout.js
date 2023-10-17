@@ -2,6 +2,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "./components/Header";
 import Providers from "./Providers";
+import MovieFilter from "./components/MovieFilter";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -16,7 +17,8 @@ export default function RootLayout({ children }) {
        <Providers>
         {/* Header*/}
         <Header />
-        {/* Navbar*/}
+        {/* Filter*/}
+        <MovieFilter />
         {/* SearchBox*/}
         {children}
         </Providers>
