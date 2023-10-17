@@ -20,7 +20,7 @@ export default function Header() {
             </span>
             <span className=" text-xl sm:inline  hidden font-bold py-1 px-2 rounded-lg">
               {" "}
-              Website
+              IMDB
             </span>
           </h2>
         </Link>

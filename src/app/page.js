@@ -15,7 +15,7 @@ export default async function Home({ searchParams }) {
   }
   const data = await res.json();
   const results = data.results; // array of movies
-  console.log(results);
+
 
   return (
     <div className="">

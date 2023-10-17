@@ -5,10 +5,10 @@ import {FaRegThumbsUp} from "react-icons/fa";
 
 export default function Card({ result }) {
   return (
-    <div className="cursor-pointer sm:p-3 sm:hover:shadow-slate-400 sm:shadow-md rounded-lg sm:border sm:border-slate-400 sm:m-2 transition-shadow duration-200">
+    <div className=" sm:hover:animate-pulse sm:hover:scale-[1.1] sm:hover:m-[20px] sm:hover:shadow-2xl dark:sm:hover:bg-black  sm:hover:bg-amber-200 cursor-pointer sm:p-3 sm:hover:shadow-slate-400 sm:shadow-md rounded-lg sm:border sm:border-slate-400 sm:m-2 transition-shadow duration-200">
       <Link href={`/movie/${result.id}`}>
         <Image
-          className=""
+          className="rounded-lg"
           src={`https://image.tmdb.org/t/p/original/${
             result.backdrop_path || result.poster_path
           }`}

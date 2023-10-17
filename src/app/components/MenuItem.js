@@ -5,7 +5,7 @@ export default function MenuItem({title, href, Icon}) {
     <div>
         <Link href={href} className='mx-4 lg:mx-6 hover:text-amber-600 font-semibold'>
             <Icon className='text-2xl sm:hidden mx-4'/>
-            <p className='hidden sm:inline my-2 text-sm'>{title} </p>
+            <p className='hidden sm:inline my-2 text-xl'>{title} </p>
         </Link>
     </div>
   )
