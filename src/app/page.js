@@ -1,5 +1,6 @@
-const APIKEY = process.env.APIKEY;
 import Results from "./components/Results";
+const APIKEY = process.env.APIKEY;
+import Image from "next/image";
 export default async function Home({ searchParams }) {
   const genre = searchParams.genre || "fetchPopular";
 
@@ -18,7 +19,7 @@ export default async function Home({ searchParams }) {
 
   return (
     <div className="">
-      <Results results={results}/>
+      <Results results={results} />
     </div>
   );
 }

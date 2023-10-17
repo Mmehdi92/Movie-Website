@@ -5,7 +5,7 @@ export default function Results({results}) {
   <div>
     {results.map((result)=>(
       <div key={result.id}>
-        <h1>{result.title}</h1>
+        <h1>{result.original_title}</h1>
       </div>
     ))}
   </div>
