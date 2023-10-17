@@ -26,8 +26,8 @@ export default function Card({ result }) {
         <div className="p-2">
           <p className="line-clamp-2 text-md">{result.overview}</p>
           <br />
-          <h2 className="truncate text-lg font-bold">{result.title || result.original_title}</h2>
-          <p className=" flex items-center truncate ">{result.release_date || "Date unknow"} <FaRegThumbsUp className="h-5 mr-1 ml-3 text-md" /><span className="dark:text-amber-600 text-emerald-600 font-bold">{result.vote_count}</span></p>
+          <h2 className="truncate text-lg font-bold">{result.title || result.name}</h2>
+          <p className=" flex items-center truncate ">{result.release_date || result.first_air_date} <FaRegThumbsUp className="h-5 mr-1 ml-3 text-md" /><span className="dark:text-amber-600 text-emerald-600 font-bold">{result.vote_count}</span></p>
         </div>
     
       </Link>
