@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "./components/Header";
 import Providers from "./Providers";
 import MovieFilter from "./components/MovieFilter";
+import SearchBox from "./components/SearchBox";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -20,6 +21,7 @@ export default function RootLayout({ children }) {
         {/* Filter*/}
         <MovieFilter />
         {/* SearchBox*/}
+        <SearchBox />
         {children}
         </Providers>
       </body>

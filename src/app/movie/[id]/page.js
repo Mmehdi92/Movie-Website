@@ -1,7 +1,6 @@
 import Image from "next/image";
 import React from "react";
-import {MdFavoriteBorder} from "react-icons/md";
-import {MdFavorite} from "react-icons/md";
+
 
 async function getMovie(movieId) {
 try {
@@ -44,8 +43,7 @@ export default async function MoviePage({params}) {
           <p className="mb-3"><span className="font-semibold mr-1">Release Date:</span> {movie.release_date || movie.first_air_date}</p>
           <p className="mb-3"><span className="font-semibold mr-1">Upvoted count: </span> {movie.vote_count}</p>
         </div>
-        {/* <MdFavoriteBorder className="text-6xl"/>
-        <MdFavorite className="text-6xl text-yellow-300"/> */}
+      
     </div>
   
   </div>;
