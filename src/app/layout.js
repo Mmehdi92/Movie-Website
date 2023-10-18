@@ -4,6 +4,9 @@ import Header from "./components/Header";
 import Providers from "./Providers";
 import MovieFilter from "./components/MovieFilter";
 import SearchBox from "./components/SearchBox";
+import Footer from "./components/Footer";
+
+import Results from "./components/Results";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -22,7 +25,11 @@ export default function RootLayout({ children }) {
         <MovieFilter />
         {/* SearchBox*/}
         <SearchBox />
+       
+     
+        {/* {Footer} */}
         {children}
+        <Footer/>
         </Providers>
       </body>
     </html>

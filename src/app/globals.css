@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+
+*{
+ min-height: fit-content;
+}
 html::-webkit-scrollbar{
     display: none;
 }

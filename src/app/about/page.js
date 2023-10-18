@@ -3,7 +3,7 @@ import {BiSolidMoviePlay} from 'react-icons/bi'
 
 export default function About() {
   return (
-    <div className="max-w-6xl mx-auto space-y-4 px-5 mt-10">
+    <div className="max-w-6xl mx-auto space-y-4 px-5 mt-10 mb-10 min-h-screen">
       <h1 className="text-2xl  font-medium text-amber-600 tracking-wider">
         What is Movie Website <BiSolidMoviePlay className="inline-flex text-4xl animate-bounce space-x-1 ml-2"/>
       </h1>
