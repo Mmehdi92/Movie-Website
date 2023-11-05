@@ -1,4 +1,3 @@
-import Footer from "./components/Footer";
 import Results from "./components/Results";
 const APIKEY = process.env.APIKEY;
 export default async function Home({ searchParams }) {
@@ -20,7 +19,6 @@ export default async function Home({ searchParams }) {
   return (
     <div className="">
       <Results results={results} />
-    
     </div>
   );
 }

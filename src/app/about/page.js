@@ -22,7 +22,7 @@ export default function About() {
         quotes, trivia, box-office data, editorial feature sections and a
         universal Watchlist. <br/><br />
         To learn more about watching Trailers, Clips,
-        Featurettes, and IMDb Originals, please see the IMDb Video FAQs.
+        Featurettes, and MOVIE IMDB Originals, please see the MOVIE IMDB Video FAQs.
       </p>
     </div>
   );

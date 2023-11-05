@@ -12,7 +12,7 @@ export default function Footer() {
   ];
   return (
     <div>
-      <footer className="bg-white">
+      <footer className="bg-gray-300 p-4 ">
         <div className="container mx-auto  py-[3rem]">
           {/* footer div all */}
           <div className="flex justify-between flex-col md:flex-row  items-center md:items-start  md:gap-[5rem] text-left">
@@ -31,7 +31,7 @@ export default function Footer() {
                     return (
                       <div
                         key={index}
-                        className="text-2xl bg-[#efefef] p-2 rounded-full hover:bg-[#ff0366] hover:text-white"
+                        className="text-2xl bg-[#efefef] p-2 rounded-full hover:bg-amber-500 hover:text-white"
                         style={{ transition: "all 0.3s" }}
                       >
                         {icon}
@@ -53,18 +53,18 @@ export default function Footer() {
             <div className="flex flex-col gap-8 relative">
               <p className="text-[22px] font-bold footer-main">Skill Set</p>
 
-              <span className="top-[33px] absolute w-[7rem] h-[4px] bg-[#ff0366]"></span>
+              <span className="top-[33px] absolute w-[7rem] h-[4px] bg-gray-500"></span>
 
-              <p className="text-[16px] hover:text-[#ff0366] cursor-pointer text-[#646464] font-medium hover:font-bold">
+              <p className="text-[16px] hover:text-amber-500 cursor-pointer text-[#646464] font-medium hover:font-bold">
                 React
               </p>
-              <p className="text-[16px] hover:text-[#ff0366] cursor-pointer text-[#646464] font-medium hover:font-bold">
+              <p className="text-[16px] hover:text-amber-500 cursor-pointer text-[#646464] font-medium hover:font-bold">
                 Next.js
               </p>
-              <p className="text-[16px] hover:text-[#ff0366] cursor-pointer text-[#646464] font-medium hover:font-bold">
+              <p className="text-[16px] hover:text-amber-500 cursor-pointer text-[#646464] font-medium hover:font-bold">
                 Mongo
               </p>
-              <p className="text-[16px] hover:text-[#ff0366] cursor-pointer text-[#646464] font-medium hover:font-bold">
+              <p className="text-[16px] hover:text-amber-500 cursor-pointer text-[#646464] font-medium hover:font-bold">
                 Mysql
               </p>
             </div>
@@ -73,7 +73,7 @@ export default function Footer() {
             <div className="flex flex-col gap-8 relative">
               <p className="text-[22px] font-bold footer-main">Working Hours</p>
 
-              <span className="top-[33px] absolute w-[7rem] h-[4px] bg-[#ff0366]"></span>
+              <span className="top-[33px] absolute w-[7rem] h-[4px]  bg-gray-500"></span>
 
               <p className="text-[16px]  text-[#646464] font-bold">
                 Monday - Friday:

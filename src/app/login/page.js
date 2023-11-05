@@ -1,4 +1,4 @@
-import Link from "next/link";
+
 
 export default function Login() {
   return (
@@ -39,7 +39,7 @@ export default function Login() {
         </form>
 
         <p className="mt-4 text-sm text-center text-gray-700">
-          Don't have an account?{" "}
+          Dont have an account?{" "}
       
             <span className="text-blue-400 hover:underline hover:cursor-pointer">Sign up</span>
          

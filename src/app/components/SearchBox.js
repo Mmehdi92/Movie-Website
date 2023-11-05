@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 export default function SearchBox() {
   const [input, setInput] = useState("");
     const router = useRouter();
+
+    
   function handleSubmit(e) {
     e.preventDefault();
     console.log(input);
