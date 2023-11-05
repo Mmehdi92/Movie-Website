@@ -48,7 +48,7 @@ export default function ContactForm() {
             className="block my-2 text-left text-lg  
                                       font-medium text-gray-500"
           >
-            Your email
+           Email
           </label>
           <input
             type="email"
