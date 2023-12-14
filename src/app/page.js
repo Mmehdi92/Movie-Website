@@ -1,5 +1,8 @@
+import MovieFilter from "./components/MovieFilter";
 import Results from "./components/Results";
-const APIKEY = process.env.APIKEY;
+import SearchBox from "./components/SearchBox";
+const APIKEY = process.env.REACT_APP_APIKEY;
+
 export default async function Home({ searchParams }) {
   const genre = searchParams.genre || "fetchPopular";
 
@@ -18,6 +21,9 @@ export default async function Home({ searchParams }) {
 
   return (
     <div className="">
+  <MovieFilter />
+  <SearchBox/>
+
       <Results results={results} />
     </div>
   );
