@@ -18,6 +18,7 @@ export const POST = async (req, res) => {
     console.log(existingUser);
 
     if (existingUser.length > 0) {
+      console.log("User already exists"); 
       return new Response(JSON.stringify({ message: "User already exists" }));
     }
 
