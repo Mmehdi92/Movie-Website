@@ -18,11 +18,10 @@ export default async function Home({ searchParams }) {
   const data = await res.json();
   const results = data.results; // array of movies
 
-
   return (
     <div className="">
-  <MovieFilter />
-  <SearchBox/>
+      <MovieFilter />
+      <SearchBox />
 
       <Results results={results} />
     </div>

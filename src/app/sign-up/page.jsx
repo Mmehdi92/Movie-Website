@@ -1,7 +1,9 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function SignUp() {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -9,12 +11,9 @@ export default function SignUp() {
     password: "",
   });
 
- 
-
   const handlesubmit = async (e) => {
     e.preventDefault();
- 
-  
+
     try {
       const response = await fetch("/api/new/user", {
         method: "POST",
@@ -23,18 +22,27 @@ export default function SignUp() {
         },
         body: JSON.stringify(formData),
       });
+      const data = await response.json();
 
-      if (response.ok) {
-        //do something optional
-        console.log("response worked");
+      if (data.status === 201) {
+        alert("Account Created Successfully");
+       
       } else {
-        //do something optional
-        console.log("response failed");
+        alert("Something went wrong");
       }
+  
     } catch (error) {
       console.log(error);
-   
-    }}
+    } finally {
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+      });
+    }
+    router.push("/login");
+  };
 
   return (
     <div className="relative flex flex-col items-center justify-center m-[50px] overflow-hidden ">
