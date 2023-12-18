@@ -7,7 +7,7 @@ import { AiOutlineMail } from "react-icons/ai";
 import { VscAccount } from "react-icons/vsc";
 import { CgProfile } from "react-icons/cg";
 import { IoIosLogOut } from "react-icons/io";
-
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import DarkModeSwitch from "./DarkModeSwitch";
 import { useSession, signOut } from "next-auth/react";
@@ -16,6 +16,7 @@ import { useState } from "react";
 export default function Header() {
   const { data: session, status } = useSession();
   const [menuProfile, setMenuProfile] = useState(false);
+  const router = useRouter(); 
 
   const handleClick = () => {
     setMenuProfile(!menuProfile);
@@ -57,7 +58,7 @@ export default function Header() {
       </div>
       {menuProfile && (
         <div className="container absolute top-0 left-0 z-10 flex flex-col justify-start h-screen p-4 space-y-4 rounded-lg w-fit dark:bg-gray-400">
-          <Link href="/dashboard">
+          <Link href="/profile">
             <span className="font-semibold text-black text-md dark:text-black ">
               {" "}
               Welcome <br />
@@ -71,7 +72,7 @@ export default function Header() {
               Dashboard
             </span>
           </Link>
-          <Link href="/dashboard">
+          <Link href="/favorites">
             <span className="font-semibold text-black text-md dark:text-black ">
               Favorites
             </span>
@@ -79,7 +80,8 @@ export default function Header() {
           <hr />
           <div
             className="absolute flex space-x-2 duration-200 bottom-5 hover:cursor-pointer hover:text-black hover:scale-125 hover:font-semibold"
-            onClick={() => signOut()}
+            onClick={() => signOut()
+            .then(() => router.push("/"))}
           >
             <p className="dark:text-black">Log out</p>
             <IoIosLogOut className="text-2xl text-black " />

@@ -20,12 +20,12 @@ export default function SearchBox() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex max-w-6xl mx-auto justify-between items-center px-5"
+      className="flex items-center justify-between max-w-6xl px-5 mx-auto"
     >
       <input
         value={input}
         onChange={(e) => setInput(e.target.value)}
-        className="w-full h-14 flex-1 rounded-sm font-mono placeholder-gray-500 outline-none bg-transparent"
+        className="flex-1 w-full font-mono placeholder-gray-500 bg-transparent rounded-sm outline-none h-14"
         type="text"
         placeholder="Search your movie... "
       />

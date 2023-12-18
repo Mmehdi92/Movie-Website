@@ -6,3 +6,5 @@ export default function loading() {
     <Image width={200} height={200} src="spinner.svg" alt="loading..." />
   </div>;
 }
+
+

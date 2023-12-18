@@ -27,12 +27,10 @@ export default function Login() {
     }
 
     if (callback.ok) {
-      // Gebruik de Next.js router om door te sturen naar de homepagina
-      
-      // Eventueel kun je ook window.location.href = "/" gebruiken voor een volledige vernieuwing
+    
       alert("Login successful!");
       console.log(JSON.stringify(session), 'session');
-       router.push("/user");
+       router.push("/profile");
     }
   };
 
