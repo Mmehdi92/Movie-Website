@@ -38,13 +38,11 @@ export const authOptions = {
           user[0].password
         );
 
-       
         if (passwordMatches) {
-          console.log(user[0], );
-          return user[0]; 
+          console.log(user[0]);
+          return user[0];
         }
 
-        
         console.log("Password does not match");
         throw new Error("Password is incorrect");
       },
@@ -56,11 +54,10 @@ export const authOptions = {
       if (user) {
         token.uid = user;
       }
-      
+
       return token;
     },
     session: async ({ session, token }) => {
-      
       if (token && token.uid) {
         session.user = {
           id: token.uid.id,
