@@ -67,7 +67,7 @@ export default function Header() {
               </span>
             </span>
           </Link>
-          <Link href="/dashboard">
+          <Link href={`/dashboard/${session?.user.id}`}>
             <span className="font-semibold text-black text-md dark:text-black">
               Dashboard
             </span>

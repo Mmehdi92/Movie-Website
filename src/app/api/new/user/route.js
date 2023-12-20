@@ -1,5 +1,4 @@
 import { query } from "@/utils/dbConnection";
-import { getSesusession } from "next-auth/react";
 
 import bcrypt from "bcrypt";
 
@@ -43,37 +42,29 @@ export const POST = async (req, res) => {
   }
 };
 
-// export const PATCH = async (req, res) => {
-//   try {
-//     // Retrieve the session
-//     const session = await getSession({ req });
-//     console.log(session);
+export async function PUT(req, res) {
+  const { firstName, lastName, email, userId } = await req.json();
+  if (!firstName || !lastName || !email || !userId) {
+    return new Response(JSON.stringify({ message: "Missing fields" }));
+  }
+  console.log(firstName, lastName, email, userId);
 
-//     // Check if the user is authenticated
-//     if (!session || !session.user) {
-//       return new Response(
-//         JSON.stringify({ message: "Unauthorized", status: 401 })
-//       );
-//     }
+  try {
+    const updateUser = await query({
+      query:
+        "UPDATE user SET first_name = ?, last_name = ?, email = ? WHERE id = ?",
+      values: [firstName, lastName, email, userId],
+    });
 
-//     // Extract user ID from the session
-//     const userId = JSON.stringify(session.user?.id);
+    if (updateUser.affectedRows === 0) {
+      return new Response(
+        JSON.stringify({ message: "User not found or failed something bad happend", status: 404 })
+      );
+    }
 
-//     // The rest of your PATCH logic goes here...
+    return new Response(JSON.stringify(updateUser[0]), { status: 200 });  
 
-//     const { firstName, lastName, email, } = await req.json();
-
-//     // Use userId in your query or logic as needed
-//     const updatedUser = await query({
-//       query:
-//         "UPDATE user SET first_name=?, last_name=?, email=?,  WHERE id=?",
-//       values: [firstName, lastName, email, userId],
-//     });
-
-//     return new Response(JSON.stringify(updatedUser), { status: 200 });
-//   } catch (error) {
-//     return new Response(
-//       JSON.stringify({ message: error.message }, { status: 500 })
-//     );
-//   }
-// };
+  } catch (error) {
+    return  new Response (JSON.stringify({message: error.message}, {status: 500}))
+  }
+};
