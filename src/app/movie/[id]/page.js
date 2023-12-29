@@ -1,5 +1,6 @@
 import Image from "next/image";
 import React from "react";
+import AddFavoriteMovie from "@/app/components/AddFavorieteMovie";
 
 export const metadata = {
   title: "Search Page",
@@ -60,6 +61,7 @@ export default async function MoviePage({ params }) {
           </p>
         </div>
       </div>
+     <AddFavoriteMovie />
     </div>
   );
 }

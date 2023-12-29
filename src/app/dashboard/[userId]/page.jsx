@@ -5,7 +5,6 @@ import { CiEdit } from "react-icons/ci";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import AddBanner from "../../components/AddBanner";
-import Image from "next/image";
 
 export default function Dashboard({ params }) {
   const { data: session, status } = useSession();
@@ -13,8 +12,9 @@ export default function Dashboard({ params }) {
   const [togleList, setTogleList] = useState(false);
   const [userLists, setUserLists] = useState([]);
   const [user, setUser] = useState(session?.user?.first_name || "");
-
+  
   const [clickedListItem, setClickedListItem] = useState(false);
+  const [listClicked, setListClicked] = useState(false);
   const [list, setList] = useState({
     list_name: "",
     user_id: userId,
@@ -131,6 +131,10 @@ export default function Dashboard({ params }) {
             {userLists.map((list, key) => (
               <li
                 key={key}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setListClicked(!listClicked); // one way change
+                }}
                 className="flex items-center space-x-3 align-middle"
               >
                 <p className="hover:cursor-pointer"> {list.list_name}</p>{" "}
@@ -196,12 +200,14 @@ export default function Dashboard({ params }) {
               Add List
             </button>
           </div>
-        ) : (
-          <div>
-            {/* show results or a standard template */}
-            results
-          </div>
-        )}
+        ) : 
+        <div className="">
+          {listClicked ? <div className="">
+            list results
+          </div> : <p>Click a list to view</p>}
+        </div>
+         
+        }
       </div>
       {clickedListItem ? (
         <div className="flex w-1/3 h-full mx-4 ">
