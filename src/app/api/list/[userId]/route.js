@@ -23,7 +23,7 @@ export async function GET(req, { params }) {
   }
 }
 
-export async function DELETE(req, { params }) {
+export async function DELETE(req,) {
  const {listId} = await req.json();
 
   try {
@@ -41,3 +41,6 @@ export async function DELETE(req, { params }) {
     );
   }
 }
+
+
+

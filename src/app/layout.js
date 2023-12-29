@@ -5,6 +5,7 @@ import Providers from "./Providers";
 import AuthProvider from "./context/AuthContext";
 
 import Footer from "./components/Footer";
+import AddBanner from "./components/AddBanner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +22,9 @@ export default function RootLayout({ children }) {
 
         <Providers>
           {/* Header*/}
+          {/* <AddBanner /> */}
           <Header />
+    
           {/* Filter*/}
           {/* <MovieFilter /> */}
           {/* SearchBox*/}

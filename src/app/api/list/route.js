@@ -47,3 +47,30 @@ export async function POST(req) {
     );
   }
 }
+
+export async function PUT(req, res) {
+  const { listId, listName } = await req.json();
+
+  if (!listId || !listName) {
+    return new Response(JSON.stringify({ message: "Missing fields" }));
+  }
+
+  console.log(listId, listName);
+
+  try {
+    const updateList = await query({
+      query: "UPDATE lists SET list_name = ? WHERE id = ?",
+      values: [listName, listId],
+    });
+
+    if (updateList.affectedRows === 0) {
+      return new Response(
+        JSON.stringify({ message: "List not found or failed, something bad happened", status: 404 })
+      );
+    }
+
+    return new Response(JSON.stringify(updateList[0]), { status: 200 });
+  } catch (error) {
+    return new Response(JSON.stringify({ message: error.message }, { status: 500 }));
+  }
+}

@@ -4,15 +4,17 @@ import { MdDelete, MdAdd } from "react-icons/md";
 import { CiEdit } from "react-icons/ci";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
+import AddBanner from "../../components/AddBanner";
+import Image from "next/image";
 
 export default function Dashboard({ params }) {
   const { data: session, status } = useSession();
   const userId = params.userId;
   const [togleList, setTogleList] = useState(false);
-  const [userLists, setUserLists] = useState(
-    []
-  );
+  const [userLists, setUserLists] = useState([]);
   const [user, setUser] = useState(session?.user?.first_name || "");
+
+  const [clickedListItem, setClickedListItem] = useState(false);
   const [list, setList] = useState({
     list_name: "",
     user_id: userId,
@@ -86,16 +88,37 @@ export default function Dashboard({ params }) {
         }),
       });
 
-      console.log("Response:", response);
+      const data = await response.json();
 
-      if (response.status !== 201) {
+      if (data.status !== 201) {
         throw new Error(`Error: ${response.statusText}`);
       }
       await fetchUserLists(list.user_id);
-      const data = await response.json();
       console.log("Response Data:", data);
     } catch (error) {
       console.error(error.message);
+    }
+  };
+
+  const editList = async () => {
+    try {
+      const updateList = {
+        listName: list.list_name,
+        listId: list.id,
+      };
+
+      const response = await fetch(`/api/list`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updateList),
+      });
+
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error("Error:", error.message);
     }
   };
 
@@ -103,33 +126,39 @@ export default function Dashboard({ params }) {
     <div className="flex h-screen max-w-full p-1 mt-2 ">
       {/* list bar */}
       <div className="h-full pl-5 mr-5">
-      {userLists.length > 0 ? (
-  <ol className="space-y-4">
-    {userLists.map((list, key) => (
-      <li key={key} className="flex items-center space-x-3 align-middle">
-        <p className="hover:cursor-pointer"> {list.list_name}</p>{" "}
-        <CiEdit
-          className="hover:cursor-pointer"
-          onClick={() => console.log(list.id, "clicked")}
-        />
-        <MdDelete
-          className="hover:cursor-pointer"
-          onClick={() => {
-            deleteList(list.id);
-          }}
-        />
-      </li>
-    ))}
-  </ol>
-) : (
-  <div>
-    {userLists.length === 0 ? (
-      <p>No lists. Make a list!</p>
-    ) : (
-      <p>Loading...</p>
-    )}
-  </div>
-)}
+        {userLists.length > 0 ? (
+          <ol className="space-y-4">
+            {userLists.map((list, key) => (
+              <li
+                key={key}
+                className="flex items-center space-x-3 align-middle"
+              >
+                <p className="hover:cursor-pointer"> {list.list_name}</p>{" "}
+                <CiEdit
+                  onClick={() => {
+                    setClickedListItem(!clickedListItem);
+                    setList({ ...list, list_name: list.list_name });
+                  }}
+                  className="hover:cursor-pointer"
+                />
+                <MdDelete
+                  className="hover:cursor-pointer"
+                  onClick={() => {
+                    deleteList(list.id);
+                  }}
+                />
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <div>
+            {userLists.length === 0 ? (
+              <p>No lists. Make a list!</p>
+            ) : (
+              <p>Loading...</p>
+            )}
+          </div>
+        )}
         <hr className="mt-6" />
         <p
           onClick={() => {
@@ -174,6 +203,36 @@ export default function Dashboard({ params }) {
           </div>
         )}
       </div>
+      {clickedListItem ? (
+        <div className="flex w-1/3 h-full mx-4 ">
+          <form>
+            <label className="mr-2">List Name</label>
+            <input
+              onChange={(e) =>
+                setList({ ...list, list_name: e.target.value, id: list.id })
+              }
+              type="text"
+              value={list?.list_name || ""}
+              placeholder="e.g. Actions"
+              className="p-2 rounded-lg ring ring-white focus:ring-black focus-within:bg-gray-300 focus-within:text-black focus-within:font-semibold"
+            />
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                editList();
+                setClickedListItem(false);
+              }}
+              type="submit"
+              className="px-16 mt-4 border rounded w-fit hover:scale-110"
+            >
+              Save
+            </button>
+          </form>
+          <div className="w-1/3 mt-auto h-1/3">text</div>
+        </div>
+      ) : (
+        <AddBanner/>
+      )}
     </div>
   );
 }

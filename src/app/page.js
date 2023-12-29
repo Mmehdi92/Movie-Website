@@ -1,3 +1,4 @@
+import AddBanner from "./components/AddBanner";
 import MovieFilter from "./components/MovieFilter";
 import Results from "./components/Results";
 import SearchBox from "./components/SearchBox";
@@ -24,6 +25,7 @@ export default async function Home({ searchParams }) {
       <SearchBox />
 
       <Results results={results} />
+      
     </div>
   );
 }
