@@ -44,3 +44,28 @@ export async function DELETE(req,) {
 
 
 
+
+
+// try {
+//   const response = await fetch(`/api/list/${userId}`, {
+//     method: "GET",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//   });
+
+//   if (!response.ok) {
+//     throw new Error(`Error: ${response.statusText}`);
+//   }
+
+//   const data = await response.json();
+//   setUserLists(data);
+
+//   // Update the user lists in the local state
+// } catch (error) {
+//   // Handle errors
+//   console.error("Error fetching user lists:", error.message);
+// }
+
+
+

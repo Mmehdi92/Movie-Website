@@ -11,13 +11,15 @@ export default function Dashboard({ params }) {
   const userId = params.userId;
   const [togleList, setTogleList] = useState(false);
   const [userLists, setUserLists] = useState([]);
+  const [listItems, setListItems] = useState([]);
   const [user, setUser] = useState(session?.user?.first_name || "");
-  
+
   const [clickedListItem, setClickedListItem] = useState(false);
   const [listClicked, setListClicked] = useState(false);
   const [list, setList] = useState({
     list_name: "",
     user_id: userId,
+    listId: "",
   });
 
   useEffect(() => {
@@ -50,7 +52,7 @@ export default function Dashboard({ params }) {
   };
 
   const deleteList = async (listId) => {
-    console.log(listId);
+    // console.log(listId);
     try {
       const response = await fetch(`/api/list/${userId}`, {
         method: "DELETE",
@@ -122,6 +124,30 @@ export default function Dashboard({ params }) {
     }
   };
 
+  const getListMovieItem = async (listId) => {
+    console.log(
+      listId,
+      "clicked getListmovieItem Function <<<<<<<<<<<<<<<<<<<"
+    );
+    try {
+      const listId = list.listId;
+      const response = await fetch(`/api/movie/${listId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ listId }),
+      });
+      
+      const data = await response.json();
+      setListItems(data);
+      console.log(data);
+      return new Response(response.json(), { status: 200 });
+    } catch (error) {
+      return new Response(error.message, { status: 500 });
+    }
+  };
+
   return (
     <div className="flex h-screen max-w-full p-1 mt-2 ">
       {/* list bar */}
@@ -133,11 +159,22 @@ export default function Dashboard({ params }) {
                 key={key}
                 onClick={(e) => {
                   e.preventDefault();
-                  setListClicked(!listClicked); // one way change
+                  setListClicked(!listClicked);
+                  // one way change
                 }}
                 className="flex items-center space-x-3 align-middle"
               >
-                <p className="hover:cursor-pointer"> {list.list_name}</p>{" "}
+                <p
+                  onClick={(e) => {
+                    getListMovieItem(list.id);
+                    e.preventDefault();
+                    getListMovieItem(list.id);
+                  }}
+                  className="tracking-wider hover:cursor-pointer"
+                >
+                  {" "}
+                  {list.list_name}
+                </p>{" "}
                 <CiEdit
                   onClick={() => {
                     setClickedListItem(!clickedListItem);
@@ -200,14 +237,15 @@ export default function Dashboard({ params }) {
               Add List
             </button>
           </div>
-        ) : 
-        <div className="">
-          {listClicked ? <div className="">
-            list results
-          </div> : <p>Click a list to view</p>}
-        </div>
-         
-        }
+        ) : (
+          <div className="">
+            {listClicked ? (
+              <div className="">list results</div>
+            ) : (
+              <p>Click a list to view</p>
+            )}
+          </div>
+        )}
       </div>
       {clickedListItem ? (
         <div className="flex w-1/3 h-full mx-4 ">
@@ -237,7 +275,7 @@ export default function Dashboard({ params }) {
           <div className="w-1/3 mt-auto h-1/3">text</div>
         </div>
       ) : (
-        <AddBanner/>
+        <AddBanner />
       )}
     </div>
   );

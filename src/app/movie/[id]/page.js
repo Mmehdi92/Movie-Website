@@ -61,7 +61,14 @@ export default async function MoviePage({ params }) {
           </p>
         </div>
       </div>
-     <AddFavoriteMovie />
+      {console.log(movie)}
+     <AddFavoriteMovie 
+     movieId={movie.id}
+      movieTitle={movie.title || movie.name}
+      movieOverview={movie.overview}
+      imgURL={movie.backdrop_path || movie.poster_path}
+      
+     />
     </div>
   );
 }
