@@ -30,6 +30,8 @@ export async function POST(req, { params }) {
         values: [movieTitle,userId,movieId,listId],
     });
 
+    console.log(addMovie);
+
     return new Response(JSON.stringify(addMovie[0]), { status: 201 });
    } catch (error) {
     return new Response(

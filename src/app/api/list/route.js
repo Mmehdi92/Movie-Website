@@ -55,7 +55,7 @@ export async function PUT(req, res) {
     return new Response(JSON.stringify({ message: "Missing fields" }));
   }
 
-  console.log(listId, listName);
+  // console.log(listId, listName);
 
   try {
     const updateList = await query({

@@ -57,7 +57,9 @@ export default function Header() {
         </Link>
       </div>
       {menuProfile && (
-        <div className="container absolute top-0 left-0 z-10 flex flex-col justify-start h-screen p-4 space-y-4 rounded-lg w-fit dark:bg-gray-400">
+        <div onMouseLeave={()=>{
+          setMenuProfile(false)
+        }}className="container absolute top-0 left-0 z-10 flex flex-col justify-start h-screen p-4 space-y-4 rounded-lg w-fit dark:bg-gray-400">
           <Link href="/profile">
             <span className="font-semibold text-black text-md dark:text-black ">
               {" "}

@@ -34,7 +34,7 @@ export default function AddFavoriteMovie({
 
   const addMovieToList = async () => {
     try {
-      const response = await fetch("/api/movie", {
+      const response = await fetch(`/api/movie`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

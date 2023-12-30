@@ -2,7 +2,7 @@ import { query } from "@/utils/dbConnection";
 
 export async function GET(req, { params }) {
   console.log({ params });
-  const listId = params.listId; 
+  const listId = params.id; 
 
   try {
     const result = await query({
@@ -16,11 +16,7 @@ export async function GET(req, { params }) {
       );
     }
 
-    return new Response(JSON.stringify(result), {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    return new Response(JSON.stringify(result));
   } catch (error) {
     return new Response(
       JSON.stringify({ message: error.message }, { status: 500 })

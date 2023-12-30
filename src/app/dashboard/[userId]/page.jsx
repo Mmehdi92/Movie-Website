@@ -43,16 +43,12 @@ export default function Dashboard({ params }) {
 
       const data = await response.json();
       setUserLists(data);
-
-      // Update the user lists in the local state
     } catch (error) {
-      // Handle errors
       console.error("Error fetching user lists:", error.message);
     }
   };
 
   const deleteList = async (listId) => {
-    // console.log(listId);
     try {
       const response = await fetch(`/api/list/${userId}`, {
         method: "DELETE",
@@ -67,10 +63,7 @@ export default function Dashboard({ params }) {
         throw new Error(`Error: ${response.statusText}`);
       }
       setUserLists(userLists.filter((list) => list.id !== listId));
-
-      // Update the user lists in the local state
     } catch (error) {
-      // Handle errors
       console.error("Error fetching user lists:", error.message);
     }
   };
@@ -125,26 +118,21 @@ export default function Dashboard({ params }) {
   };
 
   const getListMovieItem = async (listId) => {
-    console.log(
-      listId,
-      "clicked getListmovieItem Function <<<<<<<<<<<<<<<<<<<"
-    );
     try {
-      const listId = list.listId;
       const response = await fetch(`/api/movie/${listId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ listId }),
       });
-      
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+
       const data = await response.json();
       setListItems(data);
-      console.log(data);
-      return new Response(response.json(), { status: 200 });
     } catch (error) {
-      return new Response(error.message, { status: 500 });
+      console.error("Error fetching user lists:", error.message);
     }
   };
 
@@ -157,21 +145,13 @@ export default function Dashboard({ params }) {
             {userLists.map((list, key) => (
               <li
                 key={key}
-                onClick={(e) => {
-                  e.preventDefault();
-                  setListClicked(!listClicked);
-                  // one way change
+                onClick={() => {
+                  setListClicked(true);
+                  getListMovieItem(list.id);
                 }}
                 className="flex items-center space-x-3 align-middle"
               >
-                <p
-                  onClick={(e) => {
-                    getListMovieItem(list.id);
-                    e.preventDefault();
-                    getListMovieItem(list.id);
-                  }}
-                  className="tracking-wider hover:cursor-pointer"
-                >
+                <p className="tracking-wider hover:cursor-pointer">
                   {" "}
                   {list.list_name}
                 </p>{" "}
@@ -193,11 +173,7 @@ export default function Dashboard({ params }) {
           </ol>
         ) : (
           <div>
-            {userLists.length === 0 ? (
-              <p>No lists. Make a list!</p>
-            ) : (
-              <p>Loading...</p>
-            )}
+        <p>No list make 1 💪</p>
           </div>
         )}
         <hr className="mt-6" />
@@ -211,42 +187,70 @@ export default function Dashboard({ params }) {
           List <MdAdd className="ml-2 text-xl" />{" "}
         </p>
       </div>
-      {/* list results */}
+    
       <div className="w-full h-full border border-black">
-        {togleList ? (
-          <div className="flex flex-col h-full p-4 space-y-2">
-            <form>
-              <label className="mr-2">List Name</label>
-              <input
-                onChange={(e) =>
-                  setList({ ...list, list_name: e.target.value })
-                }
-                type="text"
-                placeholder="e.g. Actions"
-                className="p-2 rounded-lg ring ring-white focus:ring-black focus-within:bg-gray-300 focus-within:text-black focus-within:font-semibold"
-              />
-            </form>
+  {togleList ? (
+    <div className="flex flex-col h-full p-4 space-y-2">
+      <form>
+        <label className="mr-2">List Name</label>
+        <input
+          onChange={(e) =>
+            setList({ ...list, list_name: e.target.value })
+          }
+          type="text"
+          placeholder="e.g. Actions"
+          className="p-2 rounded-lg ring ring-white focus:ring-black focus-within:bg-gray-300 focus-within:text-black focus-within:font-semibold"
+        />
+      </form>
 
-            <button
-              onClick={() => {
-                addList();
-                setTogleList(false);
-              }}
-              className=" hover:cursor-pointer hover:underline hover:underline-offset-4"
-            >
-              Add List
-            </button>
+      <button
+        onClick={() => {
+          addList();
+          setTogleList(false);
+        }}
+        className="hover:cursor-pointer hover:underline hover:underline-offset-4"
+      >
+        Add List
+      </button>
+    </div>
+  ) : (
+    <div className="">
+      {listClicked && Array.isArray(listItems) && listItems.length !== 0 ? (
+        <div className="">
+          <div className="flex flex-col h-full p-4 space-y-2">
+            {listItems.map((item, key) => (
+              <div
+                key={key}
+                className="flex flex-row items-center space-x-2"
+              >
+                <p
+                  onClick={() => {
+                    console.log(listItems.length);
+                  }}
+                  className="flex w-full mt-2 text-xl border-b"
+                >
+                  {item.movie_title}{" "}
+                  <MdDelete
+                    size={40}
+                    color="red"
+                    className="ml-auto hover:cursor-pointer"
+                    onClick={() => {
+                      deleteList(item.id);
+                    }}
+                  />
+                </p>
+              </div>
+            ))}
           </div>
-        ) : (
-          <div className="">
-            {listClicked ? (
-              <div className="">list results</div>
-            ) : (
-              <p>Click a list to view</p>
-            )}
-          </div>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div>No items in the list</div>
+      )}
+    </div>
+  )}
+</div>
+
+
       {clickedListItem ? (
         <div className="flex w-1/3 h-full mx-4 ">
           <form>
