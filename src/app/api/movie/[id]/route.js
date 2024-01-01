@@ -23,3 +23,18 @@ export async function GET(req, { params }) {
     );
   }
 }
+
+
+export async function DELETE(req,{params}) {
+  const movieId = params.id;
+  try {
+    const result = await query({
+      query: "DELETE FROM favorite_movies WHERE id = ?",
+      values: [movieId],
+    });
+    console.log(result);
+    return new Response(JSON.stringify(result));
+  } catch (error) {
+    return new Response(JSOn.stringify({ message: error.message }, { status: 500 }));
+  }
+}

@@ -11,7 +11,7 @@ export default function Dashboard({ params }) {
   const userId = params.userId;
   const [togleList, setTogleList] = useState(false);
   const [userLists, setUserLists] = useState([]);
-  const [listItems, setListItems] = useState([]);
+  const [ listItems = [], setListItems] = useState([]);
   const [user, setUser] = useState(session?.user?.first_name || "");
 
   const [clickedListItem, setClickedListItem] = useState(false);
@@ -136,6 +136,26 @@ export default function Dashboard({ params }) {
     }
   };
 
+  const deleteMovieItem = async (listId) => {
+    try {
+      const response = await fetch(`/api/movie/${listId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(listId ),
+      });
+      console.log(response);
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+      setListItems(listItems.filter((list) => list.id !== listId));
+    } catch (error) {
+      console.error("Error fetching user lists:", error.message);
+    }
+  };
+
   return (
     <div className="flex h-screen max-w-full p-1 mt-2 ">
       {/* list bar */}
@@ -165,7 +185,7 @@ export default function Dashboard({ params }) {
                 <MdDelete
                   className="hover:cursor-pointer"
                   onClick={() => {
-                    deleteList(list.id);
+                    deleteList(list.id)
                   }}
                 />
               </li>
@@ -224,9 +244,7 @@ export default function Dashboard({ params }) {
                 className="flex flex-row items-center space-x-2"
               >
                 <p
-                  onClick={() => {
-                    console.log(listItems.length);
-                  }}
+               
                   className="flex w-full mt-2 text-xl border-b"
                 >
                   {item.movie_title}{" "}
@@ -235,7 +253,8 @@ export default function Dashboard({ params }) {
                     color="red"
                     className="ml-auto hover:cursor-pointer"
                     onClick={() => {
-                      deleteList(item.id);
+                      console.log(item.id);
+                     deleteMovieItem(item.id)
                     }}
                   />
                 </p>
