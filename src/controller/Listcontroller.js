@@ -57,3 +57,27 @@ export const addNewList = async (list) => {
     console.error(error.message);
   }
 };
+
+export const UpdateListById = async (list) => {
+  try {
+    const updateList = {
+      listName: list.list_name,
+      listId: list.id,
+    };
+
+    const response = await fetch(`/api/list`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updateList),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.statusText}`);
+    }
+    return new Response(JSON.stringify(response));
+  } catch (error) {
+    console.error(error.message);
+  }
+};

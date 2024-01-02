@@ -9,6 +9,7 @@ import {
   getListFromUserById,
   deleteListById,
   addNewList,
+  UpdateListById,
 } from "@/controller/Listcontroller";
 
 export default function Dashboard({ params }) {
@@ -18,7 +19,6 @@ export default function Dashboard({ params }) {
   const [userLists, setUserLists] = useState([]);
   const [listItems = [], setListItems] = useState([]);
   const [user, setUser] = useState(session?.user?.first_name || "");
-
   const [clickedListItem, setClickedListItem] = useState(false);
   const [listClicked, setListClicked] = useState(false);
   const [list, setList] = useState({
@@ -55,33 +55,6 @@ export default function Dashboard({ params }) {
     }
   };
 
-  // const addList = async () => {
-  //   try {
-  //     console.log("Trying to add list:", list);
-
-  //     const response = await fetch("/api/list", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         list_name: list.list_name,
-  //         userId: list.user_id,
-  //       }),
-  //     });
-
-  //     const data = await response.json();
-
-  //     if (data.status !== 201) {
-  //       throw new Error(`Error: ${response.statusText}`);
-  //     }
-  //     await fetchUserLists(list.user_id);
-  //     console.log("Response Data:", data);
-  //   } catch (error) {
-  //     console.error(error.message);
-  //   }
-  // };
-
   const addList = async () => {
     try {
       const data = await addNewList(list);
@@ -94,23 +67,16 @@ export default function Dashboard({ params }) {
 
   const editList = async () => {
     try {
-      const updateList = {
-        listName: list.list_name,
-        listId: list.id,
-      };
-
-      const response = await fetch(`/api/list`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updateList),
-      });
-
-      const data = await response.json();
-      console.log(data);
+      const data = await UpdateListById(list);
+      const UpdatedListData = await fetchUserLists(list.user_id);
+      if (UpdatedListData.length !== 0) {
+        setUserLists(UpdatedListData);
+      } else {
+        setUserLists([]);
+      }
+      console.log("Response Data:", data);
     } catch (error) {
-      console.error("Error:", error.message);
+      console.error("Failed to update the list:", error.message);
     }
   };
 
