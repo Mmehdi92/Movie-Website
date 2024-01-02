@@ -5,14 +5,17 @@ import { CiEdit } from "react-icons/ci";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import AddBanner from "../../components/AddBanner";
-import{getListFromUserById} from"@/controller/Listcontroller"
+import {
+  getListFromUserById,
+  deleteListById,
+} from "@/controller/Listcontroller";
 
 export default function Dashboard({ params }) {
   const { data: session, status } = useSession();
   const userId = params.userId;
   const [togleList, setTogleList] = useState(false);
   const [userLists, setUserLists] = useState([]);
-  const [ listItems = [], setListItems] = useState([]);
+  const [listItems = [], setListItems] = useState([]);
   const [user, setUser] = useState(session?.user?.first_name || "");
 
   const [clickedListItem, setClickedListItem] = useState(false);
@@ -29,30 +32,46 @@ export default function Dashboard({ params }) {
     }
   }, [userId]);
 
-
-
-  const fetchUserLists = async (userId) =>{
-    const data = await getListFromUserById(userId)
-    setUserLists(data)
-  };
-
-  const deleteList = async (listId) => {
+  const fetchUserLists = async (userId) => {
     try {
-      const response = await fetch(`/api/list/${userId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ listId }),
-      });
-      console.log(response);
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`);
+      const data = await getListFromUserById(userId);
+      if (data.length !== 0) {
+        setUserLists(data);
+      }else{
+        
+        setUserLists([])
       }
-      setUserLists(userLists.filter((list) => list.id !== listId));
+
     } catch (error) {
       console.error("Error fetching user lists:", error.message);
+    }
+  };
+
+  // const deleteList = async (listId) => {
+  //   try {
+  //     const response = await fetch(`/api/list/${listId}`, {
+  //       method: "DELETE",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+
+  //     });
+  //     console.log(response);
+
+  //     if (!response.ok) {
+  //       throw new Error(`Error: ${response.statusText}`);
+  //     }
+  //     setUserLists(userLists.filter((list) => list.id !== listId));
+  //   } catch (error) {
+  //     console.error("Error fetching user lists:", error.message);
+  //   }
+  // };
+  const deleteList = async (id) => {
+    try {
+      await deleteListById(id);
+      setUserLists(userLists.filter((list) => list.id !== id));
+    } catch (error) {
+      console.error("Error deleting list:", error.message);
     }
   };
 
@@ -131,7 +150,7 @@ export default function Dashboard({ params }) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(listId ),
+        body: JSON.stringify(listId),
       });
       console.log(response);
 
@@ -173,7 +192,7 @@ export default function Dashboard({ params }) {
                 <MdDelete
                   className="hover:cursor-pointer"
                   onClick={() => {
-                    deleteList(list.id)
+                    deleteList(list.id);
                   }}
                 />
               </li>
@@ -181,7 +200,7 @@ export default function Dashboard({ params }) {
           </ol>
         ) : (
           <div>
-        <p>No list make 1 💪</p>
+            <p>No list make 1 💪</p>
           </div>
         )}
         <hr className="mt-6" />
@@ -195,68 +214,66 @@ export default function Dashboard({ params }) {
           List <MdAdd className="ml-2 text-xl" />{" "}
         </p>
       </div>
-    
+
       <div className="w-full h-full border border-black">
-  {togleList ? (
-    <div className="flex flex-col h-full p-4 space-y-2">
-      <form>
-        <label className="mr-2">List Name</label>
-        <input
-          onChange={(e) =>
-            setList({ ...list, list_name: e.target.value })
-          }
-          type="text"
-          placeholder="e.g. Actions"
-          className="p-2 rounded-lg ring ring-white focus:ring-black focus-within:bg-gray-300 focus-within:text-black focus-within:font-semibold"
-        />
-      </form>
-
-      <button
-        onClick={() => {
-          addList();
-          setTogleList(false);
-        }}
-        className="hover:cursor-pointer hover:underline hover:underline-offset-4"
-      >
-        Add List
-      </button>
-    </div>
-  ) : (
-    <div className="">
-      {listClicked && Array.isArray(listItems) && listItems.length !== 0 ? (
-        <div className="">
+        {togleList ? (
           <div className="flex flex-col h-full p-4 space-y-2">
-            {listItems.map((item, key) => (
-              <div
-                key={key}
-                className="flex flex-row items-center space-x-2"
-              >
-                <p
-               
-                  className="flex w-full mt-2 text-xl border-b"
-                >
-                  {item.movie_title}{" "}
-                  <MdDelete
-                    size={40}
-                    color="red"
-                    className="ml-auto hover:cursor-pointer"
-                    onClick={() => {
-                      console.log(item.id);
-                     deleteMovieItem(item.id)
-                    }}
-                  />
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      ) : (
-        <div>No items in the list</div>
-      )}
-    </div>
-  )}
-</div>
+            <form>
+              <label className="mr-2">List Name</label>
+              <input
+                onChange={(e) =>
+                  setList({ ...list, list_name: e.target.value })
+                }
+                type="text"
+                placeholder="e.g. Actions"
+                className="p-2 rounded-lg ring ring-white focus:ring-black focus-within:bg-gray-300 focus-within:text-black focus-within:font-semibold"
+              />
+            </form>
 
+            <button
+              onClick={() => {
+                addList();
+                setTogleList(false);
+              }}
+              className="hover:cursor-pointer hover:underline hover:underline-offset-4"
+            >
+              Add List
+            </button>
+          </div>
+        ) : (
+          <div className="">
+            {listClicked &&
+            Array.isArray(listItems) &&
+            listItems.length !== 0 ? (
+              <div className="">
+                <div className="flex flex-col h-full p-4 space-y-2">
+                  {listItems.map((item, key) => (
+                    <div
+                      key={key}
+                      className="flex flex-row items-center space-x-2"
+                    >
+                      <p className="flex w-full mt-2 text-xl border-b">
+                        {item.movie_title}{" "}
+                        <MdDelete
+                          size={40}
+                          color="red"
+                          className="ml-auto hover:cursor-pointer"
+                          onClick={() => {
+                            console.log(item.id);
+                            deleteMovieItem(item.id);
+                          }}
+                        />
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div>No items in the list</div>
+            )}
+          </div>
+        )}
+      </div>
 
       {clickedListItem ? (
         <div className="flex w-1/3 h-full mx-4 ">
