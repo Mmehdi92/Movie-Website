@@ -18,3 +18,5 @@ export async function query({ query, values = [] }) {
     throw new Error(error);
   }
 }
+
+export default { query };

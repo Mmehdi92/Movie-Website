@@ -1,27 +1,46 @@
 import { query } from "@/utils/dbConnection";
+import ListDAO from "@/dao/ListDao/ListDao";
+
+// export async function GET(req, res) {
+
+//   const userId = req.query.userId;
+
+//   try {
+//     const result = await query({
+//       query: "SELECT * FROM lists WHERE user_id = ?",
+//       values: [userId],
+//     });
+
+//     if (result.length === 0) {
+//       return new Response(
+//         JSON.stringify({ message: "No lists found", status: 404 })
+//       );
+//     }
+
+//     // Send the result as JSON
+//     return new Response(JSON.stringify(result));
+//   } catch (error) {
+//     // Send the error message as JSON
+//     return new Response(
+//       JSON.stringify({ message: error.message }, { status: 500 })
+//     );
+//   }
+// }
+
 
 export async function GET(req, res) {
-  //   if (!session) {
-  //     return new Response(JSON.stringify({ message: "Unauthorized" }));
-  //   }
   const userId = req.query.userId;
 
   try {
-    const result = await query({
-      query: "SELECT * FROM lists WHERE user_id = ?",
-      values: [userId],
-    });
-
-    if (result.length === 0) {
+    const list = await ListDAO.getListByUserId(userId);
+    if(list.length === 0) {
       return new Response(
         JSON.stringify({ message: "No lists found", status: 404 })
       );
     }
 
-    // Send the result as JSON
-    return new Response(JSON.stringify(result));
+    return new Response(JSON.stringify(list));
   } catch (error) {
-    // Send the error message as JSON
     return new Response(
       JSON.stringify({ message: error.message }, { status: 500 })
     );

@@ -1,8 +1,7 @@
 "use client";
 import React from "react";
 import { MdDelete, MdAdd } from "react-icons/md";
-import { CiEdit } from "react-icons/ci";
-import { useSession } from "next-auth/react";
+import { CiEdit, CiHospital1 } from "react-icons/ci";
 import { useState, useEffect } from "react";
 import AddBanner from "../../components/AddBanner";
 import {
@@ -18,12 +17,10 @@ import {
 } from "@/controller/MovieController";
 
 export default function Dashboard({ params }) {
-  const { data: session, status } = useSession();
   const userId = params.userId;
   const [togleList, setTogleList] = useState(false);
   const [userLists, setUserLists] = useState([]);
   const [listItems = [], setListItems] = useState([]);
-  const [user, setUser] = useState(session?.user?.first_name || "");
   const [clickedListItem, setClickedListItem] = useState(false);
   const [listClicked, setListClicked] = useState(false);
   const [list, setList] = useState({
@@ -110,9 +107,9 @@ export default function Dashboard({ params }) {
   };
 
   return (
-    <div className="flex h-screen max-w-full p-1 mt-2 ">
+    <div className="flex h-screen max-w-full p-1 mt-2 overflow-y-auto file:mb-8 dark:text-gray-200 overflow-clip">
       {/* list bar */}
-      <div className="h-full pl-5 mr-5">
+      <div className="h-full p-4 pl-5 mr-5 text-gray-700 bg-white rounded-lg dark:bg-gray-800/90 dark:text-gray-200">
         {userLists.length > 0 ? (
           <ol className="space-y-4">
             {userLists.map((list, key) => (
@@ -122,21 +119,18 @@ export default function Dashboard({ params }) {
                   setListClicked(true);
                   getListMovieItem(list.id);
                 }}
-                className="flex items-center space-x-3 align-middle"
+                className="flex items-center space-x-3 align-middle cursor-pointer hover:text-indigo-500 dark:hover:text-indigo-400"
               >
-                <p className="tracking-wider hover:cursor-pointer">
-                  {" "}
-                  {list.list_name}
-                </p>{" "}
+                <p className="tracking-wider">{list.list_name}</p>{" "}
                 <CiEdit
                   onClick={() => {
                     setClickedListItem(!clickedListItem);
                     setList({ ...list, list_name: list.list_name });
                   }}
-                  className="hover:cursor-pointer"
+                  className="hover:text-yellow-400 dark:hover:text-yellow-400 hover:scale-150"
                 />
                 <MdDelete
-                  className="hover:cursor-pointer"
+                  className="hover:text-red-500 dark:hover:text-red-400 hover:scale-150"
                   onClick={() => {
                     deleteList(list.id);
                   }}
@@ -154,16 +148,15 @@ export default function Dashboard({ params }) {
           onClick={() => {
             setTogleList(!togleList);
           }}
-          className="absolute flex items-center hover:cursor-pointer bottom-5"
+          className="absolute flex items-center cursor-pointer hover:text-indigo-500 dark:hover:text-indigo-400 bottom-5 hover:scale-125"
         >
-          {" "}
-          List <MdAdd className="ml-2 text-xl" />{" "}
+          List <MdAdd className="ml-2 text-xl " />
         </p>
       </div>
 
-      <div className="w-full h-full border border-black">
+      <div className="w-full h-full dark:border-gray-600">
         {togleList ? (
-          <div className="flex flex-col h-full p-4 space-y-2">
+          <div className="flex flex-col h-full p-4 space-y-2 bg-white dark:bg-gray-800">
             <form>
               <label className="mr-2">List Name</label>
               <input
@@ -172,7 +165,7 @@ export default function Dashboard({ params }) {
                 }
                 type="text"
                 placeholder="e.g. Actions"
-                className="p-2 rounded-lg ring ring-white focus:ring-black focus-within:bg-gray-300 focus-within:text-black focus-within:font-semibold"
+                className="p-2 rounded-lg ring ring-white focus-within:bg-gray-300 focus-within:text-black focus-within:font-semibold"
               />
             </form>
 
@@ -181,42 +174,50 @@ export default function Dashboard({ params }) {
                 addList(list);
                 setTogleList(false);
               }}
-              className="hover:cursor-pointer hover:underline hover:underline-offset-4"
+              className="underline cursor-pointer underline-offset-4 hover:underline hover:underline-offset-4"
             >
               Add List
             </button>
           </div>
         ) : (
-          <div className="">
+          <div className="max-h-[75%] overflow-y-auto ">
             {listClicked &&
             Array.isArray(listItems) &&
             listItems.length !== 0 ? (
-              <div className="">
-                <div className="flex flex-col h-full p-4 space-y-2">
-                  {listItems.map((item, key) => (
-                    <div
-                      key={key}
-                      className="flex flex-row items-center space-x-2"
-                    >
-                      <p className="flex w-full mt-2 text-xl border-b">
-                        {item.movie_title}{" "}
-                        <MdDelete
-                          size={40}
-                          color="red"
-                          className="ml-auto hover:cursor-pointer"
-                          onClick={() => {
-                            console.log(item.id);
-                            deleteMovieItem(item.id);
-                          }}
-                        />
-                      </p>
-                    </div>
-                  ))}
-                </div>
+              <div className="container flex flex-col h-full p-4 space-y-6 bg-white rounded-lg dark:bg-gray-800">
+                {listItems.map((item, key) => (
+                  <div
+                    key={key}
+                    className="flex flex-row items-center space-x-2"
+                  >
+                    <p className="flex w-full pb-2 mt-2 text-xl font-semibold tracking-widest border-b rounded-lg">
+                      {item.movie_title}{" "}
+                      <MdDelete
+                        size={40}
+                        color="red"
+                        className="ml-auto cursor-pointer hover:text-red-500 dark:hover:text-red-400"
+                        onClick={() => {
+                          console.log(item.id);
+                          deleteMovieItem(item.id);
+                        }}
+                      />
+                    </p>
+                  </div>
+                ))}
               </div>
             ) : (
               <div>No items in the list</div>
             )}
+            {/* {listClicked && (
+              <div className="flex items-center justify-center">
+                <h1 className="text-transparent text-7xl bg-clip-text bg-gradient-to-r from-green-400 to-blue-500">
+                  Black Fryday Misssed ??
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-blue-500">
+                    Maybe next time 
+                  </span>
+                </h1>
+              </div>
+            )} */}
           </div>
         )}
       </div>
@@ -232,7 +233,7 @@ export default function Dashboard({ params }) {
               type="text"
               value={list?.list_name || ""}
               placeholder="e.g. Actions"
-              className="p-2 rounded-lg ring ring-white focus:ring-black focus-within:bg-gray-300 focus-within:text-black focus-within:font-semibold"
+              className="p-2 rounded-lg ring ring-white dark:ring-black focus:ring focus-within:bg-gray-300 focus-within:text-black focus-within:font-semibold"
             />
             <button
               onClick={(e) => {

@@ -13,3 +13,10 @@ html::-webkit-scrollbar{
 html{
     scrollbar-width: none;
 }
+
+.gradient-text {
+    background-clip: text;
+    color: transparent;
+    background-image: linear-gradient(to right, #8e2de2, #4a00e0);
+  }
+  
