@@ -5,6 +5,7 @@ import { CiEdit } from "react-icons/ci";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import AddBanner from "../../components/AddBanner";
+import{getListFromUserById} from"@/controller/Listcontroller"
 
 export default function Dashboard({ params }) {
   const { data: session, status } = useSession();
@@ -28,24 +29,11 @@ export default function Dashboard({ params }) {
     }
   }, [userId]);
 
-  const fetchUserLists = async (userId) => {
-    try {
-      const response = await fetch(`/api/list/${userId}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
 
-      if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`);
-      }
 
-      const data = await response.json();
-      setUserLists(data);
-    } catch (error) {
-      console.error("Error fetching user lists:", error.message);
-    }
+  const fetchUserLists = async (userId) =>{
+    const data = await getListFromUserById(userId)
+    setUserLists(data)
   };
 
   const deleteList = async (listId) => {
