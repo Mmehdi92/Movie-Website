@@ -10,7 +10,12 @@ import {
   deleteListById,
   addNewList,
   UpdateListById,
-} from "@/controller/Listcontroller";
+} from "@/controller/ListController";
+
+import {
+  deleteMovieById,
+  getMoviesByListId,
+} from "@/controller/MovieController";
 
 export default function Dashboard({ params }) {
   const { data: session, status } = useSession();
@@ -50,14 +55,15 @@ export default function Dashboard({ params }) {
     try {
       await deleteListById(id);
       setUserLists(userLists.filter((list) => list.id !== id));
+      setListItems([]);
     } catch (error) {
       console.error("Error deleting list:", error.message);
     }
   };
 
-  const addList = async () => {
+  const addList = async (newList) => {
     try {
-      const data = await addNewList(list);
+      const data = await addNewList(newList);
       await fetchUserLists(list.user_id);
       console.log("Response Data:", data);
     } catch (error) {
@@ -65,10 +71,10 @@ export default function Dashboard({ params }) {
     }
   };
 
-  const editList = async () => {
+  const editList = async (updatedList) => {
     try {
-      const data = await UpdateListById(list);
-      const UpdatedListData = await fetchUserLists(list.user_id);
+      const data = await UpdateListById(updatedList);
+      const UpdatedListData = await fetchUserLists(updatedList.user_id);
       if (UpdatedListData.length !== 0) {
         setUserLists(UpdatedListData);
       } else {
@@ -82,40 +88,24 @@ export default function Dashboard({ params }) {
 
   const getListMovieItem = async (listId) => {
     try {
-      const response = await fetch(`/api/movie/${listId}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`);
-      }
+      const data = await getMoviesByListId(listId);
 
-      const data = await response.json();
-      setListItems(data);
+      if (data.length !== 0) {
+        setListItems(data);
+      } else {
+        setListItems([]);
+      }
     } catch (error) {
       console.error("Error fetching user lists:", error.message);
     }
   };
 
-  const deleteMovieItem = async (listId) => {
+  const deleteMovieItem = async (id) => {
     try {
-      const response = await fetch(`/api/movie/${listId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(listId),
-      });
-      console.log(response);
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`);
-      }
-      setListItems(listItems.filter((list) => list.id !== listId));
+      const data = await deleteMovieById(id);
+      setListItems(listItems.filter((list) => list.id !== id));
     } catch (error) {
-      console.error("Error fetching user lists:", error.message);
+      console.error("Error deleting list:", error.message);
     }
   };
 
@@ -188,7 +178,7 @@ export default function Dashboard({ params }) {
 
             <button
               onClick={() => {
-                addList();
+                addList(list);
                 setTogleList(false);
               }}
               className="hover:cursor-pointer hover:underline hover:underline-offset-4"
@@ -247,7 +237,7 @@ export default function Dashboard({ params }) {
             <button
               onClick={(e) => {
                 e.preventDefault();
-                editList();
+                editList(list);
                 setClickedListItem(false);
               }}
               type="submit"
