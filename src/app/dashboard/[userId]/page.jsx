@@ -8,6 +8,7 @@ import AddBanner from "../../components/AddBanner";
 import {
   getListFromUserById,
   deleteListById,
+  addNewList,
 } from "@/controller/Listcontroller";
 
 export default function Dashboard({ params }) {
@@ -37,35 +38,14 @@ export default function Dashboard({ params }) {
       const data = await getListFromUserById(userId);
       if (data.length !== 0) {
         setUserLists(data);
-      }else{
-        
-        setUserLists([])
+      } else {
+        setUserLists([]);
       }
-
     } catch (error) {
       console.error("Error fetching user lists:", error.message);
     }
   };
 
-  // const deleteList = async (listId) => {
-  //   try {
-  //     const response = await fetch(`/api/list/${listId}`, {
-  //       method: "DELETE",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-
-  //     });
-  //     console.log(response);
-
-  //     if (!response.ok) {
-  //       throw new Error(`Error: ${response.statusText}`);
-  //     }
-  //     setUserLists(userLists.filter((list) => list.id !== listId));
-  //   } catch (error) {
-  //     console.error("Error fetching user lists:", error.message);
-  //   }
-  // };
   const deleteList = async (id) => {
     try {
       await deleteListById(id);
@@ -75,30 +55,40 @@ export default function Dashboard({ params }) {
     }
   };
 
+  // const addList = async () => {
+  //   try {
+  //     console.log("Trying to add list:", list);
+
+  //     const response = await fetch("/api/list", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         list_name: list.list_name,
+  //         userId: list.user_id,
+  //       }),
+  //     });
+
+  //     const data = await response.json();
+
+  //     if (data.status !== 201) {
+  //       throw new Error(`Error: ${response.statusText}`);
+  //     }
+  //     await fetchUserLists(list.user_id);
+  //     console.log("Response Data:", data);
+  //   } catch (error) {
+  //     console.error(error.message);
+  //   }
+  // };
+
   const addList = async () => {
     try {
-      console.log("Trying to add list:", list);
-
-      const response = await fetch("/api/list", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          list_name: list.list_name,
-          userId: list.user_id,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (data.status !== 201) {
-        throw new Error(`Error: ${response.statusText}`);
-      }
+      const data = await addNewList(list);
       await fetchUserLists(list.user_id);
       console.log("Response Data:", data);
     } catch (error) {
-      console.error(error.message);
+      console.error("Failed to add a new list", error.message);
     }
   };
 
