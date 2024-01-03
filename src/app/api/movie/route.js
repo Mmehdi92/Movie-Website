@@ -1,4 +1,4 @@
-import { query } from "@/utils/dbConnection";
+import MovieDAO from "@/dao/MovieDao/MovieDAO";
 
 
 export async function GET(req, { params }) {
@@ -16,27 +16,20 @@ export async function DELETE(req, { params }) {
     
 }
 
-export async function POST(req, { params }) {
-    
-    try {
-    const {movieTitle,userId,movieId,listId} = await req.json();
-    if (  !movieId  || !movieTitle || !userId || !listId) {
-        console.log(movieId,movieTitle,userId,listId);
-        return new Response(JSON.stringify({ message: "Missing fields" }));
+export async function POST(req) {
+  try {
+    const { movieTitle, userId, movieId, listId } = await req.json();
+    if (!movieId || !movieTitle || !userId || !listId) {
+      console.log(movieId, movieTitle, userId, listId);
+      return new Response(JSON.stringify({ message: "Missing fields" }));
     }
 
-    const addMovie = await query({
-        query: "INSERT INTO favorite_movies (movie_title, user_id, movie_id, list_id) VALUES (?, ?, ?, ?)",
-        values: [movieTitle,userId,movieId,listId],
-    });
+    const addedMovie = await MovieDAO.addMovie(movieTitle, userId, movieId, listId);
 
-    console.log(addMovie);
-
-    return new Response(JSON.stringify(addMovie[0]), { status: 201 });
-   } catch (error) {
+    return new Response(JSON.stringify(addedMovie), { status: 201 });
+  } catch (error) {
     return new Response(
-        JSON.stringify({ message: error.message }, { status: 500 })
+      JSON.stringify({ message: error.message }, { status: 500 })
     );
-   }
-
+  }
 }

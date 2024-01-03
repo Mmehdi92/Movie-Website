@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { MdDelete, MdAdd } from "react-icons/md";
-import { CiEdit, CiHospital1 } from "react-icons/ci";
+import { CiEdit } from "react-icons/ci";
 import { useState, useEffect } from "react";
 import AddBanner from "../../components/AddBanner";
 import {
@@ -185,6 +185,7 @@ export default function Dashboard({ params }) {
             Array.isArray(listItems) &&
             listItems.length !== 0 ? (
               <div className="container flex flex-col h-full p-4 space-y-6 bg-white rounded-lg dark:bg-gray-800">
+                <p>{list.list_name}</p>
                 {listItems.map((item, key) => (
                   <div
                     key={key}
