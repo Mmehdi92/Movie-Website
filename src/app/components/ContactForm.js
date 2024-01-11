@@ -6,10 +6,11 @@ export default function ContactForm() {
       <p className="mb-4 text-lg font-light text-center text-gray-500 sm:-text-xl">
         Got an issue ? Want to sned feedback? Need details about the project?
       </p>
-      <form action="#">
+      <form action="#" >
         <div className="flex flex-row">
           <div className="w-1/2 pr-2 ">
             <label
+            htmlFor="firstName"
               for="firstName"
               className="block my-2 text-lg font-medium text-left text-gray-500"
             >

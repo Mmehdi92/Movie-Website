@@ -1,4 +1,3 @@
-import AddBanner from "./components/AddBanner";
 import MovieFilter from "./components/MovieFilter";
 import Results from "./components/Results";
 import SearchBox from "./components/SearchBox";

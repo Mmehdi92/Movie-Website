@@ -2,11 +2,12 @@
 import Link from "next/link";
 import { useState } from "react";
 import { signIn,useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 
 export default function Login() {
- const {data:session} = useSession();
-  const router = useRouter();
+  const { data: session } = useSession() || {};
+
+  // const router = useRouter();
   const [userCredentials, setuserCredentials] = useState({
     email: "",
     password: "",
@@ -30,7 +31,7 @@ export default function Login() {
     
       alert("Login successful!");
       console.log(JSON.stringify(session), 'session');
-       router.push("/profile");
+      //  router.push("/profile");
     }
   };
 

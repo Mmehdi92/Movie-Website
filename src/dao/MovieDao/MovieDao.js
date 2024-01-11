@@ -10,7 +10,7 @@ class MovieDAO {
         values: [movieTitle, userId, movieId, listId],
       });
 
-      return addedMovie;
+      return new Movie(result[0]);
     } catch (error) {
       console.error("Error adding movie:", error);
       throw error;
