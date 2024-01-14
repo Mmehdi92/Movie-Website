@@ -1,0 +1,92 @@
+@startuml
+class User {
+  - userId: int
+  - username: string
+  - email: string
+  - password: string
+  + login(email: string, password: string): boolean
+  + editDetails(): void
+}
+
+class Movie {
+  - movieId: int
+  - title: string
+  - description: string
+  + searchMovie(query: string): List<Movie>
+}
+
+class List {
+  - listId: int
+  - name: string
+  - movies: List<Movie>
+  + addMovie(movie: Movie): void
+}
+
+class Dashboard {
+  + user: User
+  + lists: List[]
+  + movies: Movie[]
+}
+
+class MovieWebsiteApi {
+  - database: Database
+  + authenticateUser(email: string, password: string): boolean
+  + retrieveUserDetails(userId: int): User
+  + searchMovies(query: string): List<Movie>
+  + retrieveUserLists(userId: int): List[]
+  + retrieveMoviesInList(listId: int): List<Movie>
+  + addMovieToList(listId: int, movie: Movie): void
+}
+
+class Database {
+  - users: Map<int, User>
+  - movies: Map<int, Movie>
+  - lists: Map<int, List>
+  + addUser(user: User): void
+  + addMovie(movie: Movie): void
+  + addList(list: List): void
+  + getUser(userId: int): User
+  + getMovie(movieId: int): Movie
+  + getList(listId: int): List
+}
+
+class Controller {
+  - userDao: UserDAO
+  - movieDao: MovieDAO
+  - listDao: ListDAO
+  + processLogin(email: string, password: string): boolean
+  + processEditDetails(userId: int): void
+  + processSearchMovie(query: string): List<Movie>
+  + processRetrieveUserLists(userId: int): List[]
+  + processRetrieveMoviesInList(listId: int): List<Movie>
+  + processAddMovieToList(listId: int, movie: Movie): void
+}
+
+class UserDAO {
+  + addUser(user: User): void
+  + getUser(userId: int): User
+}
+
+class MovieDAO {
+  + addMovie(movie: Movie): void
+  + getMovie(movieId: int): Movie
+}
+
+class ListDAO {
+  + addList(list: List): void
+  + getList(listId: int): List
+}
+
+User "1" --> "1..*" List
+User "1" --> "1..*" Dashboard
+Dashboard "1" --> "1..*" List
+Dashboard "1" --> "0..*" Movie
+MovieWebsiteApi "1" --> "1" Database
+MovieWebsiteApi "1" --> "0..*" List
+MovieWebsiteApi "1" --> "0..*" Movie
+Controller "1" --> "1" UserDAO
+Controller "1" --> "1" MovieDAO
+Controller "1" --> "1" ListDAO
+Controller "1" --> "1" MovieWebsiteApi
+
+@enduml

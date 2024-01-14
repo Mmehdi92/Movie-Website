@@ -1,0 +1,48 @@
+@startuml
+!define USER User
+!define GUI Gui
+!define MVDB_API MvdbApi
+!define OWN_API MovieWebsiteApi
+!define DATABASE Database
+
+actor USER as UserAlias
+boundary GUI as Gui
+control MVDB_API as MvdbApi
+control OWN_API as MovieWebsiteApi
+database DATABASE as DB
+
+UserAlias -> Gui: Interact to search for a movie
+Gui -> MvdbApi: Send movie search request
+activate MvdbApi
+MvdbApi --> Gui: Receive movie results
+
+alt Results found
+  Gui -> UserAlias: Display movie results in GUI
+  UserAlias -> Gui: Select a movie
+
+  alt Additional data available
+    Gui -> MvdbApi: Retrieve additional data for the selected movie
+    activate MvdbApi
+    MvdbApi --> Gui: Receive additional movie data
+    note right: Display additional data in the GUI
+  else No additional data
+    note right: Display basic movie information in the GUI
+  end
+
+  UserAlias -> Gui: Select a list from MovieWebsiteApi
+  Gui -> MovieWebsiteApi: Retrieve user's lists
+  activate MovieWebsiteApi
+  MovieWebsiteApi --> Gui: Return user's lists
+
+  Gui -> MvdbApi: Add selected movie to the list
+  activate MvdbApi
+  MvdbApi -> MovieWebsiteApi: Add movie to the user's selected list in MovieWebsiteApi
+  deactivate MvdbApi
+  deactivate MovieWebsiteApi
+
+else No results found
+  Gui --> UserAlias: Display "No results found" in GUI
+end
+
+deactivate MvdbApi
+@enduml

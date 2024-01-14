@@ -1,0 +1,58 @@
+@startuml
+!define JWT_AUTHENTICATION
+
+actor User as U
+participant "NextAuth" as NA
+database "MovieWebsiteApi" as API
+database "Database" as DB
+
+U -> NA: Submits login credentials
+activate NA
+
+NA -> API: Request to authorize credentials
+activate API
+
+API -> DB: Query user by email
+activate DB
+DB --> API: User data (if exists)
+deactivate DB
+
+alt User not found
+  API -> NA: Error: No user found
+else Password match
+  API -> bcrypt: Compare passwords
+  activate bcrypt
+  bcrypt --> API: Password match result
+  deactivate bcrypt
+
+  alt Passwords match
+    API -> NA: Successful authorization
+    activate NA
+    !define JWT_AUTHENTICATION
+    NA -> NA: Create JWT token
+    deactivate NA
+    API --> NA: JWT token
+  else Passwords do not match
+    API -> NA: Error: Incorrect password
+  end
+end
+
+NA -> U: Redirect to the appropriate page
+deactivate NA
+
+U -> API: Request for JWT token validation
+activate API
+
+API -> NA: Validate JWT token
+activate NA
+!define JWT_AUTHENTICATION
+NA -> NA: Check token validity
+deactivate NA
+
+alt Token is valid
+  API --> U: Respond with success
+else Token is invalid
+  API --> U: Respond with error
+end
+
+@enduml

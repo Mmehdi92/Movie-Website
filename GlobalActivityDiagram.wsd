@@ -1,0 +1,89 @@
+@startuml
+|Customer|
+start
+:Visit Homepage;
+:Click SignUp Button;
+if (Logged In?) then (no)
+  :Navigate to Login Page;
+  if (Click Create New Account?) then (yes)
+    :Navigate to Create Account Page;
+    :Fill Account Details;
+    if (Account Created Successfully?) then (yes)
+      :Navigate to Login Page;
+    else (no)
+      :Show Error Message;
+    endif
+  else (no)
+    :Login;
+    if (Login Successful?) then (yes)
+      :Navigate to Homepage;
+    else (no)
+      :Show Login Error;
+    endif
+  endif
+else (yes)
+  :Navigate to Homepage;
+endif
+
+:Toggle Navbar;
+|Customer|
+if (Click Welcome Username?) then (yes)
+  :Navigate to Edit Page;
+  :Edit Personal Info;
+  if (Saved Successfully?) then (yes)
+    :Navigate to Homepage;
+  else (no)
+    :Show Error Message;
+  endif
+else if (Click Dashboard?) then (yes)
+  :Navigate to Dashboard Page;
+  if (Have Lists?) then (yes)
+    :View Lists;
+    if (Select List?) then (yes)
+      |Customer|
+      :Edit List;
+      if (Click Edit List?) then (yes)
+        :Change List Name;
+        if (Save List Changes?) then (yes)
+          |Customer|
+          :Navigate to Dashboard Page;
+        else (no)
+          :Show Error Message;
+        endif
+      else if (Click Delete List?) then (yes)
+        :Delete List;
+        :Navigate to Dashboard Page;
+      endif
+    endif
+  else (no)
+    :Create New List;
+  endif
+else if (Click Favorite?) then (yes)
+  :Do Nothing; (* Placeholder for future functionality *)
+else if (Click Log Out?) then (yes)
+  :Log Out;
+  :Navigate to Login Page;
+endif
+
+:Search Movie;
+if (Results Found?) then (yes)
+  :Render Search Results;
+  if (Click Movie?) then (yes)
+    :Navigate to Details Page;
+    if (Logged In?) then (yes)
+      |Customer|
+      :Add to Favorite;
+      if (Select List?) then (yes)
+        |Customer|
+        :Choose List;
+        :Add to List;
+      endif
+    endif
+  endif
+else (no)
+  :Show No Results Message;
+endif
+
+|Customer|
+stop
+@enduml

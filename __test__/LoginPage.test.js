@@ -4,6 +4,8 @@ import dbConnection from '@/utils/dbConnection';
 import bcrypt from 'bcrypt';
 import { SessionProvider } from 'next-auth/react'; // Make sure to import SessionProvider
 
+// Rest of your test file code...
+
 
 // Mock the authentication provider
 jest.mock('next-auth/next', () => ({
@@ -63,3 +65,4 @@ describe('Login Page', () => {
     });
   });
 });
+

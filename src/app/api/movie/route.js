@@ -1,4 +1,4 @@
-import MovieDAO from "@/dao/MovieDao/MovieDAO";
+import MovieDAO from "@/dao/MovieDao/DaoMovie";
 
 
 export async function GET(req, { params }) {
