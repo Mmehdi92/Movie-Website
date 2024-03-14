@@ -1,5 +1,4 @@
 import ListDAO from "@/dao/ListDao/ListDao";
-import { query } from "@/utils/dbConnection";
 
 export async function GET(req, { params }) {
   const userId = params.id;

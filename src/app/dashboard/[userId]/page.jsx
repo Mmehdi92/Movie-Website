@@ -99,7 +99,7 @@ export default function Dashboard({ params }) {
 
   const deleteMovieItem = async (id) => {
     try {
-      const data = await deleteMovieById(id);
+      await deleteMovieById(id);
       setListItems(listItems.filter((list) => list.id !== id));
     } catch (error) {
       console.error("Error deleting list:", error.message);

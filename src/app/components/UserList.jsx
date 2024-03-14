@@ -2,30 +2,35 @@
 import React from "react";
 import { useState } from "react";
 import { MdDelete, MdAdd } from "react-icons/md";
-import { UseSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import {
   getListFromUserById,
   deleteListById,
-  addNewList,
   UpdateListById,
-} from "@/controller/ListController";
+} from "@/controller/Listcontroller";
 export default function UserList() {
-  const { data: session, status } = useSession();
-
   const [clickedListItem, setClickedListItem] = useState(false);
   const [listClicked, setListClicked] = useState(false);
   const [userLists, setUserLists] = useState([]);
   const [togleList, setTogleList] = useState(false);
 
+  // const fetchUserLists = async (userId) => {
+  //   try {
+  //     const data = await getListFromUserById(userId);
+  //     if (data.length !== 0 ? data : []) {
+  //       setUserLists(data);
+  //     } else {
+  //       setUserLists([]);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching user lists:", error.message);
+  //   }
+  // };
 
   const fetchUserLists = async (userId) => {
     try {
       const data = await getListFromUserById(userId);
-      if (data.length !== 0) {
-        setUserLists(data);
-      } else {
-        setUserLists([]);
-      }
+      setUserLists(data.length !== 0 ? data : []);
     } catch (error) {
       console.error("Error fetching user lists:", error.message);
     }
@@ -35,21 +40,21 @@ export default function UserList() {
     try {
       await deleteListById(id);
       setUserLists(userLists.filter((list) => list.id !== id));
-      setListItems([]);
+      // setListItems([]);
     } catch (error) {
       console.error("Error deleting list:", error.message);
     }
   };
 
-  const addList = async (newList) => {
-    try {
-      const data = await addNewList(newList);
-      await fetchUserLists(list.user_id);
-      console.log("Response Data:", data);
-    } catch (error) {
-      console.error("Failed to add a new list", error.message);
-    }
-  };
+  // const addList = async (newList) => {
+  //   try {
+  //     const data = await addNewList(newList);
+  //     await fetchUserLists(list.user_id);
+  //     console.log("Response Data:", data);
+  //   } catch (error) {
+  //     console.error("Failed to add a new list", error.message);
+  //   }
+  // };
 
   const editList = async (updatedList) => {
     try {
@@ -83,6 +88,7 @@ export default function UserList() {
               <CiEdit
                 onClick={() => {
                   setClickedListItem(!clickedListItem);
+                  editList(list);
                   setList({ ...list, list_name: list.list_name });
                 }}
                 className="hover:text-yellow-400 dark:hover:text-yellow-400 hover:scale-150"
@@ -97,9 +103,7 @@ export default function UserList() {
           ))}
         </ol>
       ) : (
-        <div>
-          <p>No list make 1 💪</p>
-        </div>
+        <p>No list make 1 💪</p>
       )}
       <hr className="mt-6" />
       <p

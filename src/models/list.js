@@ -1,12 +1,9 @@
 class List {
-    constructor(id, listName, userId) {
-      this.id = id;
-      this.listName = listName;
-      this.userId = userId;
-    }
-  
-    
+  constructor(id, listName, userId) {
+    this.id = id;
+    this.listName = listName;
+    this.userId = userId;
   }
-  
-  export default List;
-  
+}
+
+export default List;

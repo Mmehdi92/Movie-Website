@@ -26,6 +26,7 @@ export default function SignUp() {
 
       if (data.status === 201) {
         alert("Account Created Successfully");
+        router.push("/login");
        
       } else {
         alert("Something went wrong");

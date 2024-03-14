@@ -32,3 +32,26 @@ export const deleteMovieById = async (id) => {
     console.error("Error fetching user lists:", error.message);
   }
 };
+
+export const addMovieToList = async (newMovie) => {
+  
+  try {
+    const response = await fetch(`/api/movie`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        movieTitle: newMovie.movieTitle,
+        movieId: newMovie.movieId,
+        listId: newMovie.listId,
+      }),
+    });
+    if (!response.ok) {
+      throw new Error(`Error: ${response.statusText}`);
+    }
+    return new Response(JSON.stringify(response));
+  } catch (error) {
+    console.error("Error fetching user lists:", error.message);
+  }
+};

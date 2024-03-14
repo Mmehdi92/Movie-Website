@@ -10,7 +10,7 @@ export async function query({ query, values = [] }) {
   });
 
   try {
-    const [rows, fields] = await dbConnection.execute(query, values);
+    const [rows] = await dbConnection.execute(query, values);
     dbConnection.end();
     return rows;
   } catch (error) {

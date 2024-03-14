@@ -80,10 +80,10 @@ export default function Profile() {
           />
         </form>
         <Image
-          src="/images/popcorn.jpg"
+          src="/images/profile_placeholder.jpg"
           width={300}
           height={200}
-          className="rounded-sm"
+          className="rounded-lg "
         />
       </div>
       <button

@@ -16,11 +16,11 @@ import { useState } from "react";
 export default function Header() {
   const { data: session, status } = useSession();
   const [menuProfile, setMenuProfile] = useState(false);
-  const router = useRouter(); 
+  const router = useRouter();
 
   const handleClick = () => {
     setMenuProfile(!menuProfile);
-    console.log(menuProfile);
+    // console.log(menuProfile);
   };
 
   return (
@@ -57,9 +57,12 @@ export default function Header() {
         </Link>
       </div>
       {menuProfile && (
-        <div onMouseLeave={()=>{
-          setMenuProfile(false)
-        }}className="container absolute top-0 left-0 z-10 flex flex-col justify-start h-screen p-4 space-y-4 rounded-lg w-fit dark:bg-gray-400">
+        <div
+          onMouseLeave={() => {
+            setMenuProfile(false);
+          }}
+          className="container absolute top-0 left-0 z-10 flex flex-col justify-start h-screen p-4 space-y-4 rounded-lg w-fit dark:bg-gray-400"
+        >
           <Link href="/profile">
             <span className="font-semibold text-black text-md dark:text-black ">
               {" "}
@@ -71,7 +74,7 @@ export default function Header() {
           </Link>
           <Link href={`/dashboard/${session?.user.id}`}>
             <span className="font-semibold text-black text-md dark:text-black">
-              Dashboard
+              Lists
             </span>
           </Link>
           <Link href="/favorites">
@@ -81,9 +84,12 @@ export default function Header() {
           </Link>
           <hr />
           <div
-            className="absolute flex space-x-2 duration-200 bottom-5 hover:cursor-pointer hover:text-black hover:scale-125 hover:font-semibold"
-            onClick={() => signOut()
-            .then(() => router.push("/"))}
+            className="absolute flex space-x-2 text-sm duration-200 bottom-5 hover:cursor-pointer hover:text-black hover:scale-105 hover:font-semibold"
+            onClick={() => {
+              signOut().then(() => {
+                router.push("/");
+              });
+            }}
           >
             <p className="dark:text-black">Log out</p>
             <IoIosLogOut className="text-2xl text-black " />

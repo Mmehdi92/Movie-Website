@@ -31,6 +31,7 @@ export const deleteListById = async (id) => {
     if (!response.ok) {
       throw new Error(`Error: ${response.statusText}`);
     }
+    return new Response(JSON.stringify(response));
   } catch (error) {
     console.error("Error fetching user lists:", error.message);
   }

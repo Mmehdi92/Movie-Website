@@ -1,11 +1,9 @@
 class Movie {
-    constructor(id, title, userId, listId) {
-      this.id = id;
-      this.title = title;
-      this.userId = userId;
-      this.listId = listId;
-    }
+  constructor(id, title, listId) {
+    this.id = id;
+    this.title = title;
+    this.listId = listId;
   }
-  
-  export default Movie;
-  
+}
+
+export default Movie;

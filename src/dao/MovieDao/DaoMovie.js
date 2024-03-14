@@ -1,16 +1,16 @@
 import dbConnection from "@/utils/dbConnection";
-import Movie from "../../models/movie";
+
 
 class MovieDAO {
-  static async addMovie(movieTitle, userId, movieId, listId) {
+  static async addMovie(movieTitle,  movieId, listId) {
     try {
       const result = await dbConnection.query({
         query:
-          "INSERT INTO favorite_movies (movie_title, user_id, movie_id, list_id) VALUES (?, ?, ?, ?)",
-        values: [movieTitle, userId, movieId, listId],
+          "INSERT INTO favorite_movies (movie_title, movie_id, list_id) VALUES (?, ?, ?)",
+        values: [movieTitle,  movieId, listId],
       });
 
-      return new Movie(result[0]);
+      return result;
     } catch (error) {
       console.error("Error adding movie:", error);
       throw error;
@@ -52,7 +52,7 @@ class MovieDAO {
         values: [movieId],
       });
 
-      return new Movie(result[0]);
+      return result;
     } catch (error) {
       console.error("Error getting movie by id:", error);
       throw error;

@@ -1,7 +1,7 @@
 import MovieDAO from "@/dao/MovieDao/DaoMovie";
 
 export async function GET(req, { params }) {
-  console.log({ params });
+  // console.log({ params });
   const listId = params.id;
 
   try {
@@ -21,12 +21,12 @@ export async function GET(req, { params }) {
   }
 }
 
-export async function DELETE(req, { params }) {
+export async function DELETE( req,{ params }) {
   const movieId = params.id;
 
   try {
-    const result = await MovieDAO.deleteMovieById(movieId);
-    console.log(result);
+    const result = await MovieDAO.deleteMovie(movieId);
+    // console.log(result);
     return new Response(JSON.stringify(result));
   } catch (error) {
     return new Response(

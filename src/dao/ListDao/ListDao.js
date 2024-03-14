@@ -26,7 +26,7 @@ class ListDAO {
       return new List(result[0]);
     } catch (error) {
       console.error("Error creating a new list:", error);
-      throw error;
+      throw new Error(error.message);
     }
   }
 

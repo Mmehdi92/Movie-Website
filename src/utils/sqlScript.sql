@@ -28,9 +28,7 @@ DROP TABLE IF EXISTS favorite_movies;
 CREATE TABLE favorite_movies (
   id INT AUTO_INCREMENT PRIMARY KEY,
   movie_title VARCHAR(255) NOT NULL,
-  user_id INT,
   movie_id INT,
   list_id INT,
-  FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
   FOREIGN KEY (list_id) REFERENCES lists(id) ON DELETE CASCADE
 );

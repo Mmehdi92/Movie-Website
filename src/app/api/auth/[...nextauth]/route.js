@@ -39,7 +39,7 @@ export const authOptions = {
         );
 
         if (passwordMatches) {
-          console.log(user[0]);
+          // console.log(user[0]);
           return user[0];
         }
 
@@ -50,7 +50,7 @@ export const authOptions = {
   ],
   callbacks: {
     jwt: async ({ token, user }) => {
-      console.log(token);
+      // console.log(token);
       if (user) {
         token.uid = user;
       }

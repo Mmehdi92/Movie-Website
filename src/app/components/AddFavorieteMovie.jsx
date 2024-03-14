@@ -1,15 +1,14 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
-
-export default function AddFavoriteMovie({
-  imgURL,
-  movieId,
-  movieTitle,
-  movieOverview,
-}) {
+import Link from "next/link";
+import ErrorAlert from "./ErrorAlert";
+import SuccesAlert from "./SuccesAlert";
+import { addMovieToList } from "@/controller/MovieController";
+export default function AddFavoriteMovie({ movieId, movieTitle }) {
   const { data: session } = useSession();
+  const [addedSucces, setAddedSucces] = useState(false);
+  const [addedFailure, setAddedFailure] = useState(false);
   const [userLists, setUserLists] = useState([]);
   const [isAddToFavoritesClicked, setAddToFavoritesClicked] = useState(false);
   const [listId, setListId] = useState("");
@@ -19,40 +18,55 @@ export default function AddFavoriteMovie({
   };
 
   useEffect(() => {
-    console.log("Session:", session);
+    // console.log("Session:", session);
     if (isAddToFavoritesClicked && session?.user?.id) {
       fetchUserLists(session.user.id);
     }
   }, [isAddToFavoritesClicked, session]);
 
-  console.log(session?.user?.id, "session?.user?.id");
+  // console.log(session?.user?.id, "session?.user?.id");
 
   const handleListChange = (e) => {
     setListId(e.target.value);
     console.log(e.target.value);
   };
 
-  const addMovieToList = async () => {
-    try {
-      const response = await fetch(`/api/movie`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          movieId: movieId,
-          movieTitle: movieTitle,
-          userId: session?.user?.id,
-          listId: listId,
-        }),
-      });
+  // const addMovieToList = async () => {
+  //   const newMovie = new Movie(movieId, movieTitle, listId);
+  //   try {
+  //     const response = await fetch(`/api/movie`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         movieTitle: newMovie.title,
+  //         movieId: newMovie.id,
+  //         listId: newMovie.listId,
+  //       }),
+  //     });
+  //     // console.log(response);
+  //     if (response.status === 200) {
+  //       setAddedSucces(true);
+  //     }
+  //     return new Response(JSON.stringify(response));
+  //   } catch (error) {
+  //     setAddedFailure(true);
+  //     return new Response(error.message, { status: 500 });
+  //   }
+  // };
 
-      const data = await response.json();
-      if(data.status !== 201) {
-        throw new Error(`Error: ${response.statusText}`);
+  const addMovieOnList = async () => {
+    console.log("Add movie on list", movieId, movieTitle, listId);
+    const newMovie = {movieId, movieTitle, listId};
+    try {
+      const response = await addMovieToList(newMovie);
+      if (response.status === 200) {
+        setAddedSucces(true);
       }
     } catch (error) {
-      return new Response(error.message, { status: 500 })
+      console.error("Error adding movie to list:", error.message);
+      setAddedFailure(true);
     }
   };
 
@@ -70,6 +84,7 @@ export default function AddFavoriteMovie({
       }
 
       const data = await response.json();
+      console.log("User List Log ", data);
       setUserLists(data);
     } catch (error) {
       console.error("Error fetching user lists:", error.message);
@@ -78,6 +93,22 @@ export default function AddFavoriteMovie({
 
   return (
     <div className="flex flex-col w-full mt-16 h-fit">
+      {addedSucces ? (
+        <SuccesAlert
+          succesTitle={"Movie is added"}
+          succesMessage={"Check your list out 😎😎"}
+          onSucces={setAddedSucces}
+        />
+      ) : null}
+      {addedFailure ? (
+        <ErrorAlert
+          onError={setAddedFailure}
+          errorTitle={"Something went wrong"}
+          errorMessage={
+            "Ooopss.... try again. If the  errors keeps occuring please contact our support"
+          }
+        />
+      ) : null}
       {session ? (
         <>
           <p
@@ -86,39 +117,45 @@ export default function AddFavoriteMovie({
           >
             Add To Favorites ⭐
           </p>
-          {/* <div className="">
-            <p className="text-2xl font-bold">{movieTitle}</p>
-            <p className="text-xl">{movieOverview}</p>
-            <p className="text-xl text-red-500">{movieId}</p>
-
-            <Image
-              src={`https://image.tmdb.org/t/p/original/${imgURL}`}
-              height={500}
-              width={500}
-            />
-          </div> */}
 
           {isAddToFavoritesClicked && (
             <div className="flex flex-row items-center justify-center ">
               <label htmlFor="favoriteLists" className="mr-2">
                 Select a List:
               </label>
+              {/* als er 1  lijst in die word niet geselecteerd ook niet bij default */}
               <select
                 name="favoriteLists"
                 id="favoriteLists"
                 className="p-1 rounded-lg ring ring-white focus:ring-black focus-within:bg-gray-300 focus-within:text-black focus-within:font-semibold"
-                value={listId}
+                value={listId ? listId : ""}
+                defaultValue=""
                 onChange={handleListChange}
               >
-                {userLists.map((list) => (
-                  <option className="text-xl" key={list.id} value={list.id}>
-                    {list.list_name}
+                <option disabled value="">
+                  -- select an option --
+                </option>
+
+                {userLists && userLists.length > 1 ? (
+                  userLists.map((list) => (
+                    <option
+                      className="text-xl"
+                      key={list.id}
+                      value={list.id}
+                      selected={false}
+                    >
+                      {list.list_name}
+                    </option>
+                  ))
+                ) : (
+                  <option disabled value="">
+                    No lists found
                   </option>
-                ))}
+                )}
               </select>
               <button
                 onClick={() => {
-                  addMovieToList();
+                  addMovieOnList();
                 }}
                 className="p-2 ml-8 text-base text-white bg-gray-500 rounded-lg hover:cursor-pointer hover:bg-green-600"
               >
@@ -128,7 +165,12 @@ export default function AddFavoriteMovie({
           )}
         </>
       ) : (
-        <p>Login to add to your favorites</p>
+        <Link
+          href={`/login`}
+          className="items-center justify-center mx-auto text-sm font-semibold tracking-widest text-yellow-400 "
+        >
+          Save it for later! Log in to add to your favorites
+        </Link>
       )}
     </div>
   );

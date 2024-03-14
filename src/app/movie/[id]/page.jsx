@@ -61,7 +61,7 @@ export default async function MoviePage({ params }) {
           </p>
         </div>
       </div>
-      {console.log(movie)}
+      {/* {console.log(movie)} */}
      <AddFavoriteMovie 
      movieId={movie.id}
       movieTitle={movie.title || movie.name}
